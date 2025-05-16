@@ -21,13 +21,9 @@ class NN(nn.Module):
         self.d2 = nn.Linear(256, 7)
         
     def forward(self, x):
-        x = F.relu((self.bn1(self.conv1(x))))
-        x = nn.MaxPool2d(2)(x)
-        x = F.relu((self.bn2(self.conv2(x))))
-        x = nn.MaxPool2d(2)(x)
-        x = F.relu((self.bn3(self.conv3(x))))
-        x = nn.MaxPool2d(2)(x)
+        x = nn.MaxPool2d(2)(F.relu((self.bn1(self.conv1(x)))))
+        x = nn.MaxPool2d(2)(F.relu((self.bn2(self.conv2(x)))))
+        x = nn.MaxPool2d(2)(F.relu((self.bn3(self.conv3(x)))))
         x = torch.flatten(x, 1)
         x = F.relu(self.d1(x))
-        x = F.relu(self.d2(x))
-        return x
+        return self.d2(x)
